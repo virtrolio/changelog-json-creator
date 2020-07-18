@@ -62,7 +62,7 @@ def create_changelog_item(input_item):
     item_type, itemNoTag = input_item[0:5], input_item[5:]
 
     try:
-        location, content = itemNoTag.split(":", 1)[0].strip(), itemNoTag.split(":", 1)[1].strip()
+        location, content = [i.strip() for i in itemNoTag.split(":", 1)]
     except IndexError:
         raise IndexError("No location found for following item, use [TAG] Location: Content format: " + input_item)
 
@@ -198,7 +198,9 @@ def main():
 
     version_number = request_version_number(changelog)
     release_date = get_release_date()
+
     update_changelog(version_number, release_date, changelog_items, changelog)
+
     print("Program complete successfully. Check changelog.json to see if it has updated properly.")
 
 
