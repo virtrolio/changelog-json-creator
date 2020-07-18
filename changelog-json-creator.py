@@ -21,7 +21,7 @@ def extract_data():
     """
     Extract data from changelogInput.txt and changelog.json files.
     :return: input_items: array of items inputted into changelogInput.txt
-    :return: changelog: JSON content extracted as an array of dictionaries
+    :return: JSON content extracted as an array of dictionaries
     """
     try:
         with codecs.open("changelogInput.txt", encoding='utf-8') as log_file:  # utf-8 encoding allows for emojis!
@@ -56,7 +56,7 @@ def create_changelog_item(input_item):
     """
     Take input item and extract content properly to create a dictionary (aka JSON object) for changelog.json
     :param input_item: A string representing one line from changelogInput.txt
-    :return: changelog_item: input_item reformatted into a dictionary (aka JSON object)
+    :return: input_item reformatted into a dictionary (aka JSON object)
     """
     item_type, itemNoTag = input_item[0:5], input_item[5:]
 
@@ -97,7 +97,7 @@ def request_version_number(changelog):
     """
     Checks changelog for the previous version number and requests user for new version number.
     :param changelog: Changelog to search
-    :return: version_number: Version number to be displayed for this update
+    :return: Version number to be displayed for this update
     """
 
     # TODO: generates the appropriate subsequent version number for a major update / minor update / patch update,
