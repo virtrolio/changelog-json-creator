@@ -74,25 +74,25 @@ def create_changelog_item(input_item):
     """
 
     # Extract changelog item "tag" (e.g. NEW) from beginning of the line
-    item_type, itemNoTag = input_item[1:4], input_item[5:]
+    item_type, item_no_tag = input_item[1:4], input_item[5:]
 
     if not (item_type in list(css_selectors.keys())):
         # If the item_type is not one of the allowed keys in the css_selectors dictionary, raise an error
         raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + input_item)
 
     try:
-        location, content = [i.strip() for i in itemNoTag.split(":", 1)]  # Separate location from content by colon
+        location, content = [i.strip() for i in item_no_tag.split(":", 1)]  # Separate location from content by colon
     except IndexError:
         raise IndexError("No location found for following item, use '[TAG] Location: Content' format: " + input_item)
 
     if not (location in allowed_locations):
         raise ValueError("Invalid location used for this item: " + input_item)
 
-    item_type_CSS = css_selectors[item_type]
+    item_type_css = css_selectors[item_type]
 
     changelog_item = {
         "type": item_type.strip(),
-        "typeCSS": item_type_CSS,
+        "typeCSS": item_type_css,
         "location": location.strip(),
         "content": content.strip(),
     }
@@ -154,14 +154,14 @@ def update_changelog(version_number, release_date, changelog_items, changelog):
     :param changelog: changelog dictionary to be updated
     """
     # Create a new dictionary and input relevant properties
-    updateDictionary = {
+    update_dictionary = {
         "versionNumber": version_number,
         "releaseDate": release_date,
         "items": changelog_items
     }
 
     # Insert new update to beginning of changelog dictionary array (so the new entry displays at top on the website)
-    changelog.insert(0, updateDictionary)
+    changelog.insert(0, update_dictionary)
 
     # Rewrite JSON file with proper indentation
     with codecs.open("changelog.json", encoding='utf-8', mode="w+") as changelogJSON:
