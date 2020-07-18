@@ -193,7 +193,7 @@ def get_release_date():
     current_date = datetime.datetime.now().strftime("%Y-%m-%d")  # Extract current date into "YYYY-MM-DD" format
 
     # Ask if user wants to use current date for the update
-    use_current_date = input(f"Current date is:{current_date}. Would you like to set this as the release date for"
+    use_current_date = input(f"Current date is: {current_date}. Would you like to set this as the release date for"
                              " your update? (y/n): ")
 
     if use_current_date.lower() == 'y':
@@ -207,7 +207,7 @@ def get_release_date():
         user_date = datetime.datetime(year, month, day).strftime("%Y-%m-%d")  # Create date with "YYYY-MM-DD" format
         # Using datetime.datetime() here as it will automatically check to see if the numbers are valid
 
-        use_user_date = input(f"The date you inputted is: {user_date}. Is that what you want? (y/n): ")
+        use_user_date = input(f"\nThe date you inputted is: {user_date}. Is that what you want? (y/n): ")
 
         if use_user_date.lower() == 'y':
             return user_date
