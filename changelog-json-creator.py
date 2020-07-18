@@ -22,26 +22,24 @@ try:
         # Extract lines of input text file
         input_items = log_file.readlines()
         if not input_items:
-            raise ValueError("Your changelogInput.txt file is empty. This would push an empty update to the changelog."
-                             "Please copy paste from your Google Doc into changelogInput.txt")
+            raise ValueError("changelogInput.txt is empty")
+except FileNotFoundError:
+    raise FileNotFoundError("'changelogInput.txt' not found in current directory.")
 
+try:
     with codecs.open("changelog.json", encoding='utf-8') as changelogJSON:
         # Extract current changelog JSON into dictionary array
         changelog = json.load(changelogJSON)
-
 except FileNotFoundError:
-    raise FileNotFoundError("File not found. Please create a 'changelogInput.txt' file in "
-                            "the current directory and paste your changelog updates into there from the Google Docs"
-                            "bullet list (only include the bullet point lines, don't worry about copying over"
-                            "the bullets; the code accounts for that.")
+    raise FileNotFoundError("'changelog.json' not found in current directory.")
+
 
 except json.JSONDecodeError:
     with open("changelog.json") as f:
         checkJSONContent = f.read()
 
     if checkJSONContent == "":
-        input("Your JSON file seems to be empty. We thought it would be an array []. We can add square brackets [] "
-              "if you want. Press enter to continue.")
+        input("changelog.json is empty. Press enter to add an empty array [].")
         changelog = []  # Adds empty array to JSON
     else:
         raise json.JSONDecodeError
@@ -57,15 +55,13 @@ for i in range(len(input_items)):
     try:
         location, content = itemNoTag.split(":", 1)[0], itemNoTag.split(":", 1)[1]
     except IndexError:
-        raise IndexError("Index error when trying to extract location from this item --> " + itemNoTag +
-                         " Did you format your changelog items properly? Please follow the '[TAG] Location:"
-                         " Content' format.")
+        raise IndexError("No location found for following item, use [TAG] Location: Content format: " + item)
 
-    allowed_locations = ['Sitewide', 'Signing', 'My Virtrolio', 'About Us', 'Legal', 'Navbar', 'Viewing', 'FAQ', 'Footer']
+    allowed_locations = ['Sitewide', 'Signing', 'My Virtrolio', 'About Us',
+                         'Legal', 'Navbar', 'Viewing', 'FAQ', 'Footer']
 
     if not (location in allowed_locations):
-        raise ValueError("Improper location: tag given for item --> " + itemNoTag + " Please choose from" +
-                         "the allowed locations")
+        raise ValueError("Invalid location used for this item: " + item)
 
     if item_type == "[NEW]":
         item_type = "NEW"
@@ -77,7 +73,7 @@ for i in range(len(input_items)):
         item_type = "FIX"
         item_type_CSS = "changelog-fix"
     else:
-        raise ValueError("No valid [TAG] given for item --> " + itemNoTag + " Please follow the '[TAG] Location: Content' format.")
+        raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + item)
 
     items.append({
         "type": item_type.strip(),
