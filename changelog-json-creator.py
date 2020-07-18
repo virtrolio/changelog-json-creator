@@ -100,6 +100,19 @@ def create_changelog_item(input_item):
     return changelog_item
 
 
+def check_version_number(version_number):
+    numbers = version_number.split(".")
+
+    try:
+        if len(numbers) == 3 and [int(i) for i in numbers]:
+            return True
+        else:
+            raise ValueError
+    except ValueError:
+        print("The version number you entered does not fit with the X.X.X format, let's try again.")
+        return False
+
+
 def request_version_number(changelog):
     """
     Checks changelog for the previous version number and generates the appropriate subsequent version number for a
@@ -130,16 +143,19 @@ def request_version_number(changelog):
 
         version_number = ".".join([str(i) for i in [major, minor, patch]])  # Convert numbers to string, join with '.'
 
-        check_version_number = input(f"Your version number would be: {version_number}. Press enter if correct, "
-                                     "type something if incorrect: ")
+        answer = input(f"Your version number would be: {version_number}. Press enter if correct, type something if "
+                       f"incorrect: ")
 
-        if check_version_number:
+        if answer:
             request_version_number(changelog)
 
     else:
         # If the changelog has no previous versions, allow the user to choose the first version number
         print("No previous version found in changelog.json.")
         version_number = input("What version would you like to push? ")
+
+        if not (check_version_number(version_number)):
+            request_version_number(changelog)
 
     return version_number
 
