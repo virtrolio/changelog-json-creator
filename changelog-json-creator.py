@@ -23,6 +23,8 @@ css_selectors = {
     "FIX": "changelog-fix"
 }
 
+allowed_locations = ['Sitewide', 'Signing', 'My Virtrolio', 'About Us', 'Legal', 'Navbar', 'Viewing', 'FAQ', 'Footer']
+
 
 def extract_data():
     """
