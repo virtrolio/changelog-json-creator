@@ -17,6 +17,12 @@ import codecs
 import json
 import datetime
 
+css_selectors = {
+    "NEW": "changelog-new",
+    "UPD": "changelog-upd",
+    "FIX": "changelog-fix"
+}
+
 
 def extract_data():
     """
@@ -74,15 +80,14 @@ def create_changelog_item(input_item):
 
     if item_type == "[NEW]":
         item_type = "NEW"
-        item_type_CSS = "changelog-new"
     elif item_type == "[UPD]":
         item_type = "UPD"
-        item_type_CSS = "changelog-upd"
     elif item_type == "[FIX]":
         item_type = "FIX"
-        item_type_CSS = "changelog-fix"
     else:
         raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + input_item)
+
+    item_type_CSS = css_selectors[item_type]
 
     changelog_item = {
         "type": item_type.strip(),
