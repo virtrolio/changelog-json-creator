@@ -76,7 +76,7 @@ def create_changelog_item(input_item):
     # Extract changelog item "tag" (e.g. NEW) from beginning of the line
     item_type, itemNoTag = input_item[1:4], input_item[5:]
 
-    if not(item_type in list(css_selectors.keys())):
+    if not (item_type in list(css_selectors.keys())):
         # If the item_type is not one of the allowed keys in the css_selectors dictionary, raise an error
         raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + input_item)
 
