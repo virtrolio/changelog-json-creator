@@ -15,6 +15,7 @@ How to use this script:
 
 import codecs
 import json
+import datetime
 
 
 def extract_data():
@@ -116,17 +117,19 @@ def request_version_number(changelog):
     return version_number
 
 
-def update_changelog(version_number, changelog_items, changelog):
+def update_changelog(version_number, release_date, changelog_items, changelog):
     """
     Updates changelog.json with a new update, packaging the appropriately generated version number and each update item
     into a dictionary (aka JSON object) to be inserted into the first index of changelog.json
     :param version_number: Version number to be displayed for this update
+    :param release_date: Release date to be displayed for this update
     :param changelog_items: List of changelog items formatted as an array of dictionaries (aka JSON objects)
     :param changelog: changelog dictionary to be updated
     """
     # Create a new dictionary (aka JSON object) and input relevant properties
     updateDictionary = {
         "versionNumber": "v" + version_number,
+        "releaseDate": release_date,
         "items": changelog_items
     }
 
@@ -138,6 +141,33 @@ def update_changelog(version_number, changelog_items, changelog):
         changelogJSON.write(json.dumps(changelog, indent=2))
 
 
+def get_release_date():
+    """
+    Asks user if they want to use the current date for their update or if they want to enter a date.
+    :return: release date to be displayed for the update
+    """
+
+    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+    use_current_date = input("Current date is: " + current_date + ". Would you like to set this as the release date for"
+                             " your update? (y/n): ")
+
+    if use_current_date.lower() == 'y':
+        return current_date
+    else:
+        year = int(input("Enter year: "))
+        month = int(input("Enter month number (e.g. 3 for March): "))
+        day = int(input("Enter day number (e.g. 24 for July 24): "))
+
+        user_date = datetime.datetime(year, month, day).strftime("%Y-%m-%d")
+        use_user_date = input("The date you inputted is: " + user_date + ". Is that what you want? (y/n): ")
+
+        if use_user_date.lower() == 'y':
+            return user_date
+        else:
+            get_release_date()
+
+
 def main():
     input_items, changelog = extract_data()
 
@@ -147,7 +177,8 @@ def main():
         changelog_items.append(create_changelog_item(input_item))
 
     version_number = request_version_number(changelog)
-    update_changelog(version_number, changelog_items, changelog)
+    release_date = get_release_date()
+    update_changelog(version_number, release_date, changelog_items, changelog)
     print("Program complete successfully. Check changelog.json to see if it has updated properly.")
 
 
