@@ -111,7 +111,8 @@ def request_version_number(changelog):
     if changelog:
         # If changelog has at least one item in it, try to extract the topmost item's version number
         last_version = changelog[0]["versionNumber"]
-        print("Your last version was: ", last_version)
+        last_release_date = changelog[0]["releaseDate"]
+        print(f"Your last version was: {last_version}, released on {last_release_date}.")
 
         update_type = input("Would you like to push a major, minor, or patch update? Press 1, 2, or 3 respectively: ")
 
@@ -129,7 +130,7 @@ def request_version_number(changelog):
 
         version_number = ".".join([str(i) for i in [major, minor, patch]])  # Convert numbers to string, join with '.'
 
-        check_version_number = input("Your version number would be: " + version_number + ". Press enter if correct, "
+        check_version_number = input(f"Your version number would be: {version_number}. Press enter if correct, "
                                      "type something if incorrect: ")
 
         if check_version_number:
@@ -176,7 +177,7 @@ def get_release_date():
     current_date = datetime.datetime.now().strftime("%Y-%m-%d")  # Extract current date into "YYYY-MM-DD" format
 
     # Ask if user wants to use current date for the update
-    use_current_date = input("Current date is: " + current_date + ". Would you like to set this as the release date for"
+    use_current_date = input(f"Current date is:{current_date}. Would you like to set this as the release date for"
                              " your update? (y/n): ")
 
     if use_current_date.lower() == 'y':
@@ -190,7 +191,7 @@ def get_release_date():
         user_date = datetime.datetime(year, month, day).strftime("%Y-%m-%d")  # Create date with "YYYY-MM-DD" format
         # Using datetime.datetime() here as it will automatically check to see if the numbers are valid
 
-        use_user_date = input("The date you inputted is: " + user_date + ". Is that what you want? (y/n): ")
+        use_user_date = input(f"The date you inputted is: {user_date}. Is that what you want? (y/n): ")
 
         if use_user_date.lower() == 'y':
             return user_date
