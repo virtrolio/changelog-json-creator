@@ -96,23 +96,43 @@ def create_changelog_item(input_item):
 
 def request_version_number(changelog):
     """
-    Checks changelog for the previous version number and requests user for new version number.
+    Checks changelog for the previous version number and generates the appropriate subsequent version number for a
+    major / minor / patch update, according to 'Semantic Patching' (details here: https://semver.org/)
     :param changelog: Changelog to search
     :return: Version number to be displayed for this update
     """
-
-    # TODO: generates the appropriate subsequent version number for a major update / minor update / patch update,
-    #  according to 'Semantic Patching' (details here: https://semver.org/)
 
     if changelog:
         # If changelog has at least one item in it, try to extract the topmost item's version number
         last_version = changelog[0]["versionNumber"]
         print("Your last version was: ", last_version)
-    else:
-        # If the changelog is empty, assume that you want to push
-        print("No previous version found in changelog.json.")
 
-    version_number = input("What version would you like to push? ")
+        update_type = input("Would you like to push a major, minor, or patch update? Press 1, 2, or 3 respectively: ")
+
+        major, minor, patch = [int(i) for i in last_version.split(".")]
+
+        if update_type == "1":
+            major += 1
+        elif update_type == "2":
+            minor += 1
+        elif update_type == "3":
+            patch += 1
+        else:
+            print("Invalid choice. Let's try that again.")
+            request_version_number(changelog)
+
+        version_number = ".".join([str(i) for i in [major, minor, patch]])  # Convert numbers to string and join with .
+
+        check_version_number = input("Your version number would be: " + version_number + ". Press enter if correct, "
+                                     "type something if incorrect: ")
+
+        if check_version_number:
+            request_version_number(changelog)
+
+    else:
+        # If the changelog has no previous versions, allow the user to choose the first version number
+        print("No previous version found in changelog.json.")
+        version_number = input("What version would you like to push? ")
 
     return version_number
 
@@ -128,7 +148,7 @@ def update_changelog(version_number, release_date, changelog_items, changelog):
     """
     # Create a new dictionary (aka JSON object) and input relevant properties
     updateDictionary = {
-        "versionNumber": "v" + version_number,
+        "versionNumber": version_number,
         "releaseDate": release_date,
         "items": changelog_items
     }
