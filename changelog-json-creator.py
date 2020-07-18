@@ -47,9 +47,8 @@ except json.JSONDecodeError:
 items = []
 
 # Extract each changelog item and append dictionary (aka JSON object) to items
-for i in range(len(input_items)):
+for item in input_items:
 
-    item = input_items[i]
     item_type, itemNoTag = item[0:5], item[5:]
 
     try:
