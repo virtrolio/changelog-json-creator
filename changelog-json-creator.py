@@ -67,7 +67,13 @@ def create_changelog_item(input_item):
     :param input_item: A string representing one line from changelogInput.txt
     :return: input_item reformatted into a dictionary (aka JSON object)
     """
-    item_type, itemNoTag = input_item[0:5], input_item[5:]
+
+    # Extract changelog item "tag" (e.g. NEW) from beginning of the line
+    item_type, itemNoTag = input_item[1:4], input_item[5:]
+
+    if not(item_type in list(css_selectors.keys())):
+        # If the item_type is not one of the allowed keys in css_selectors, raise an error
+        raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + input_item)
 
     try:
         location, content = [i.strip() for i in itemNoTag.split(":", 1)]
@@ -79,15 +85,6 @@ def create_changelog_item(input_item):
 
     if not (location in allowed_locations):
         raise ValueError("Invalid location used for this item: " + input_item)
-
-    if item_type == "[NEW]":
-        item_type = "NEW"
-    elif item_type == "[UPD]":
-        item_type = "UPD"
-    elif item_type == "[FIX]":
-        item_type = "FIX"
-    else:
-        raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + input_item)
 
     item_type_CSS = css_selectors[item_type]
 
