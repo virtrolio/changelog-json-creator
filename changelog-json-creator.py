@@ -78,10 +78,7 @@ def create_changelog_item(input_item):
     try:
         location, content = [i.strip() for i in itemNoTag.split(":", 1)]
     except IndexError:
-        raise IndexError("No location found for following item, use [TAG] Location: Content format: " + input_item)
-
-    allowed_locations = ['Sitewide', 'Signing', 'My Virtrolio', 'About Us',
-                         'Legal', 'Navbar', 'Viewing', 'FAQ', 'Footer']
+        raise IndexError("No location found for following item, use '[TAG] Location: Content' format: " + input_item)
 
     if not (location in allowed_locations):
         raise ValueError("Invalid location used for this item: " + input_item)
