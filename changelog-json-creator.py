@@ -153,12 +153,16 @@ def request_version_number(changelog):
             request_version_number(changelog)
 
     else:
-        # If the changelog has no previous versions, allow the user to choose the first version number
-        print("No previous version found in" + CHANGELOG_OUTPUT_FILE)
-        version_number = input("What version would you like to push? ")
+        print("No previous version found in " + CHANGELOG_OUTPUT_FILE)
 
-        if not (check_version_number(version_number)):
-            request_version_number(changelog)
+        while True:
+            # If the changelog has no previous versions, allow the user to choose the first version number
+            version_number = input("What version would you like to push? ")
+
+            if check_version_number(version_number):
+                break
+            else:
+                print("The version number you entered does not fit with the X.X.X format, let's try again.\n")
 
     return version_number
 
@@ -202,20 +206,23 @@ def get_release_date():
     if use_current_date.lower() == 'y':
         return current_date
     else:
-        # Allow user to input a custom date
-        year = int(input("Enter year: "))
-        month = int(input("Enter month number (e.g. 3 for March): "))
-        day = int(input("Enter day number (e.g. 24 for July 24): "))
+        while True:
+            try:
+                # Allow user to input a custom date
+                year = int(input("Enter year: "))
+                month = int(input("Enter month number (e.g. 3 for March): "))
+                day = int(input("Enter day number (e.g. 24 for July 24): "))
 
-        user_date = datetime.datetime(year, month, day).strftime("%Y-%m-%d")  # Create date with "YYYY-MM-DD" format
-        # Using datetime.datetime() here as it will automatically check to see if the numbers are valid
+                user_date = datetime.datetime(year, month, day).strftime("%Y-%m-%d")
+                # Create date with "YYYY-MM-DD" format
+                # Using datetime.datetime() here as it will automatically check to see if the numbers are valid
 
-        use_user_date = input(f"\nThe date you inputted is: {user_date}. Is that what you want? (y/n): ")
+                use_user_date = input(f"\nThe date you inputted is: {user_date}. Is that what you want? (y/n): ")
 
-        if use_user_date.lower() == 'y':
-            return user_date
-        else:
-            get_release_date()
+                if use_user_date.lower() == 'y':
+                    return user_date
+            except ValueError:
+                input("Invalid input: please enter numbers. Press enter to try again.")
 
 
 def main():
