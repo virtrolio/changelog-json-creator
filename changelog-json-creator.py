@@ -15,6 +15,9 @@ import codecs
 import json
 import datetime
 
+CHANGELOG_INPUT_FILE = "changelogInput.txt"
+CHANGELOG_OUTPUT_FILE = "changelog.json"
+
 # CSS selectors for each type of 'tag' a changelog-item can have
 css_selectors = {
     "NEW": "changelog-new",
@@ -33,30 +36,30 @@ def extract_data():
     :return: JSON content extracted as an array of dictionaries
     """
     try:
-        with codecs.open("changelogInput.txt", encoding='utf-8') as log_file:  # utf-8 encoding allows for emojis!
+        with codecs.open(CHANGELOG_INPUT_FILE, encoding='utf-8') as log_file:  # utf-8 encoding allows for emojis!
             # Extract lines of input text file
             input_items = log_file.readlines()
             if not input_items:
-                raise ValueError("changelogInput.txt is empty")
+                raise ValueError(CHANGELOG_INPUT_FILE + " is empty")
     except FileNotFoundError:
-        raise FileNotFoundError("'changelogInput.txt' not found in current directory.")
+        raise FileNotFoundError(CHANGELOG_INPUT_FILE + "not found in current directory.")
 
     try:
-        with codecs.open("changelog.json", encoding='utf-8') as changelogJSON:
+        with codecs.open(CHANGELOG_OUTPUT_FILE, encoding='utf-8') as changelogJSON:
             # Extract current changelog JSON into dictionary array
             changelog = json.load(changelogJSON)
     except FileNotFoundError:
-        raise FileNotFoundError("'changelog.json' not found in current directory.")
+        raise FileNotFoundError(CHANGELOG_OUTPUT_FILE + "not found in current directory.")
 
     # In case changelog.json is not formatted as a proper JSON object or array of JSON objects
     except json.JSONDecodeError:
 
         # Allow JSONDecode Error is triggered by an empty file, in which case an array can be initialized
-        with open("changelog.json") as f:
+        with open(CHANGELOG_OUTPUT_FILE) as f:
             json_content = f.read()
 
         if json_content == "":
-            input("changelog.json is empty. Press enter to add an empty array [] to hold your updates: ")
+            input(CHANGELOG_OUTPUT_FILE + "is empty. Press enter to add an empty array [] to hold your updates: ")
             changelog = []  # Adds empty array to JSON
         else:
             raise json.JSONDecodeError
@@ -149,7 +152,7 @@ def request_version_number(changelog):
 
     else:
         # If the changelog has no previous versions, allow the user to choose the first version number
-        print("No previous version found in changelog.json.")
+        print("No previous version found in" + CHANGELOG_OUTPUT_FILE)
         version_number = input("What version would you like to push? ")
 
         if not (check_version_number(version_number)):
@@ -178,7 +181,7 @@ def update_changelog(version_number, release_date, changelog_items, changelog):
     changelog.insert(0, update_dictionary)
 
     # Rewrite JSON file with proper indentation
-    with codecs.open("changelog.json", encoding='utf-8', mode="w+") as changelogJSON:
+    with codecs.open(CHANGELOG_OUTPUT_FILE, encoding='utf-8', mode="w+") as changelogJSON:
         changelogJSON.write(json.dumps(changelog, indent=2))
 
 
