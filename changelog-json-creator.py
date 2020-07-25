@@ -103,15 +103,16 @@ def create_changelog_item(input_item):
 
 
 def check_version_number(version_number):
+    """
+    Checks to see if inputted version number follows semantic versioning (e.g. 1.1.0)
+    :param version_number: Version number to be checked
+    :return: Boolean, whether inputted version number follows the proper format
+    """
     numbers = version_number.split(".")
 
     try:
-        if len(numbers) == 3 and [int(i) for i in numbers]:
-            return True
-        else:
-            raise ValueError
+        return len(numbers) == 3 and [int(i) for i in numbers]
     except ValueError:
-        print("The version number you entered does not fit with the X.X.X format, let's try again.")
         return False
 
 
