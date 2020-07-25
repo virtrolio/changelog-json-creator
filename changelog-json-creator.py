@@ -26,7 +26,8 @@ css_selectors = {
 }
 
 # 'Locations' on the website a changelog item can refer to
-allowed_locations = ['Sitewide', 'Signing', 'My Virtrolio', 'About Us', 'Legal', 'Navbar', 'Viewing', 'FAQ', 'Footer']
+allowed_locations = ['Sitewide', 'Signing', 'MyVirtrolio', 'About', 'Legal', 'Navbar', 'Viewing', 'FAQ', 'Footer',
+                     'Home']
 
 
 def extract_data():
