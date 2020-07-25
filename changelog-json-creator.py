@@ -238,7 +238,7 @@ def main():
 
     update_changelog(version_number, release_date, changelog_items, changelog)  # Update changelog.json with new data
 
-    print("Program has completed successfully. Check changelog.json to see if it has updated properly.")
+    print(f"Program has completed successfully. Check {CHANGELOG_OUTPUT_FILE} to see if it has updated properly.")
 
 
 if __name__ == "__main__":
