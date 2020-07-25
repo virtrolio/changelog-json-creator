@@ -130,7 +130,8 @@ def request_version_number(changelog):
         # If changelog has at least one item in it, try to extract the topmost item's version number
         last_version = changelog[0]["versionNumber"]
         last_release_date = changelog[0]["releaseDate"]
-        print(f"Your last version was: {last_version}, released on {last_release_date}.")
+        # TODO: Make sure newline is only if retrying
+        print(f"\nYour last version was: {last_version}, released on {last_release_date}.")
 
         update_type = input("Would you like to push a major, minor, or patch update? Press 1, 2, or 3 respectively: ")
 
@@ -228,12 +229,13 @@ def get_release_date():
                 # Create date with "YYYY-MM-DD" format
                 # Using datetime.datetime() here as it will automatically check to see if the numbers are valid
 
-                use_user_date = input(f"\nThe date you inputted is: {user_date}. Is that what you want? (y/n): ")
+                use_user_date = input(f"\nThe date you inputted is: {user_date}. Is that what you want? Type y for yes"
+                                      f"or something else for no: ")
 
                 if use_user_date.lower() == 'y':
                     return user_date
             except ValueError:
-                input("Invalid input: please enter numbers. Press enter to try again.")
+                input("Invalid input: please enter numbers. Press enter to try again.\n")
 
 
 def main():
