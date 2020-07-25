@@ -14,6 +14,7 @@ How to use this script:
 import codecs
 import json
 import datetime
+import re
 
 CHANGELOG_INPUT_FILE = "changelogInput.txt"
 CHANGELOG_OUTPUT_FILE = "changelog.json"
@@ -76,17 +77,16 @@ def create_changelog_item(input_item):
     :return: input_item reformatted into a dictionary (aka JSON object)
     """
 
-    # Extract changelog item "tag" (e.g. NEW) from beginning of the line
-    item_type, item_no_tag = input_item[1:4], input_item[5:]
+    pattern = re.compile("(?:\[(\w{3})\])(?: (\(BETA\)))? (\w+): (.+)")  # Use RegEx to match each item
+    match = pattern.match(input_item)
+
+    item_type, beta_flag, location, item_content = match.groups()  # Extract captured groups from RegEx match
 
     if not (item_type in list(css_selectors.keys())):
         # If the item_type is not one of the allowed keys in the css_selectors dictionary, raise an error
-        raise ValueError("Invalid [TAG] for item, lease follow '[TAG] Location: Content' format: " + input_item)
+        raise ValueError("Invalid [TAG] for item, please follow '[TAG] Location: Content' format: " + input_item)
 
-    try:
-        location, content = [i.strip() for i in item_no_tag.split(":", 1)]  # Separate location from content by colon
-    except IndexError:
-        raise IndexError("No location found for following item, use '[TAG] Location: Content' format: " + input_item)
+    beta_flag = True if beta_flag else False
 
     if not (location in allowed_locations):
         raise ValueError("Invalid location used for this item: " + input_item)
@@ -94,10 +94,11 @@ def create_changelog_item(input_item):
     item_type_css = css_selectors[item_type]
 
     changelog_item = {
-        "type": item_type.strip(),
+        "type": item_type,
         "typeCSS": item_type_css,
-        "location": location.strip(),
-        "content": content.strip(),
+        "betaFlag": beta_flag,
+        "location": location,
+        "content": item_content,
     }
 
     return changelog_item
@@ -177,10 +178,19 @@ def update_changelog(version_number, release_date, changelog_items, changelog):
     :param changelog_items: List of changelog items formatted as an array of dictionaries (aka JSON objects)
     :param changelog: changelog dictionary to be updated
     """
+
+    # Determine if the update contains purely beta content
+    beta_update = True
+    for changelog_item in changelog_items:
+        if not changelog_item["betaFlag"]:
+            beta_update = False
+            break
+
     # Create a new dictionary and input relevant properties
     update_dictionary = {
         "versionNumber": version_number,
         "releaseDate": release_date,
+        "betaUpdate": beta_update,
         "items": changelog_items
     }
 
