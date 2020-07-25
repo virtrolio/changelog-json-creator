@@ -201,7 +201,7 @@ def get_release_date():
 
     # Ask if user wants to use current date for the update
     use_current_date = input(f"Current date is: {current_date}. Would you like to set this as the release date for"
-                             " your update? (y/n): ")
+                             " your update? Type y for yes or something else for no: ")
 
     if use_current_date.lower() == 'y':
         return current_date
