@@ -55,14 +55,15 @@ def extract_data():
     except json.JSONDecodeError:
 
         # Allow JSONDecode Error is triggered by an empty file, in which case an array can be initialized
-        with open(CHANGELOG_OUTPUT_FILE) as f:
+        with open(CHANGELOG_OUTPUT_FILE, "r+") as f:
             json_content = f.read()
 
-        if json_content == "":
-            input(CHANGELOG_OUTPUT_FILE + "is empty. Press enter to add an empty array [] to hold your updates: ")
-            changelog = []  # Adds empty array to JSON
-        else:
-            raise json.JSONDecodeError
+            if json_content == "":
+                input(CHANGELOG_OUTPUT_FILE + " is empty. Press enter to add an empty array [] to hold your updates: ")
+                f.write("[]")
+                changelog = []  # Adds empty array to JSON
+            else:
+                raise json.JSONDecodeError
 
     return input_items, changelog
 
