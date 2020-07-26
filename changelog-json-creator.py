@@ -34,7 +34,7 @@ allowed_locations = ['Sitewide', 'Signing', 'MyVirtrolio', 'About', 'Legal', 'Na
 def extract_data():
     """
     Extract data from changelogInput.txt and changelog.json files.
-    :return: input_items: array of items inputted into changelogInput.txt
+    :return: array of items inputted into changelogInput.txt
     :return: JSON content extracted as an array of dictionaries
     """
     try:
