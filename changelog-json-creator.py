@@ -230,7 +230,7 @@ def get_release_date():
                 # Using datetime.datetime() here as it will automatically check to see if the numbers are valid
 
                 use_user_date = input(f"\nThe date you inputted is: {user_date}. Is that what you want? Type y for yes"
-                                      f"or something else for no: ")
+                                      f" or something else for no: ")
 
                 if use_user_date.lower() == 'y':
                     return user_date
