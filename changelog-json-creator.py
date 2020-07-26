@@ -103,7 +103,7 @@ def create_changelog_item(input_item):
         "typeCSS": item_type_css,
         "betaFlag": beta_flag,
         "location": location,
-        "content": item_content,
+        "content": item_content.strip(),
     }
 
     return changelog_item
