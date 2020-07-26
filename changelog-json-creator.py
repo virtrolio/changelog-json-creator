@@ -91,7 +91,7 @@ def create_changelog_item(input_item):
         raise ValueError("Invalid [TAG] for following item, please follow '[TAG] Location: Content' format: "
                          + input_item)
 
-    beta_flag = True if beta_flag else False
+    beta_flag = True if beta_flag else False  # Change beta_flag to a boolean
 
     if not (location in allowed_locations):
         raise ValueError("Invalid location used for following item: " + input_item)
