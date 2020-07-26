@@ -80,16 +80,21 @@ def create_changelog_item(input_item):
     pattern = re.compile("(?:\[(\w{3})\])(?: (\(BETA\)))? (\w+): (.+)")  # Use RegEx to match each item
     match = pattern.match(input_item)
 
-    item_type, beta_flag, location, item_content = match.groups()  # Extract captured groups from RegEx match
+    if match:
+        item_type, beta_flag, location, item_content = match.groups()  # Extract captured groups from RegEx match
+    else:
+        raise ValueError("RegEx matching failed for following item, please follow '[TAG] Location: Content' format: "
+                         + input_item)
 
     if not (item_type in list(css_selectors.keys())):
         # If the item_type is not one of the allowed keys in the css_selectors dictionary, raise an error
-        raise ValueError("Invalid [TAG] for item, please follow '[TAG] Location: Content' format: " + input_item)
+        raise ValueError("Invalid [TAG] for following item, please follow '[TAG] Location: Content' format: "
+                         + input_item)
 
     beta_flag = True if beta_flag else False
 
     if not (location in allowed_locations):
-        raise ValueError("Invalid location used for this item: " + input_item)
+        raise ValueError("Invalid location used for following item: " + input_item)
 
     item_type_css = css_selectors[item_type]
 
