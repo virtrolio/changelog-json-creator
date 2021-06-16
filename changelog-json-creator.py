@@ -178,12 +178,13 @@ def request_version_number(changelog):
     return version_number
 
 
-def update_changelog(version_number, release_date, changelog_items, changelog):
+def update_changelog(version_number, release_date, new_message_available, changelog_items, changelog):
     """
     Updates changelog.json with a new update, packaging the appropriately generated version number and each update item
     into a dictionary (aka JSON object) to be inserted into the first index of changelog.json
     :param version_number: Version number to be displayed for this update
     :param release_date: Release date to be displayed for this update
+    :param new_message_available: Boolean representing whether this version allows users to send a new message
     :param changelog_items: List of changelog items formatted as an array of dictionaries (aka JSON objects)
     :param changelog: changelog dictionary to be updated
     """
@@ -199,6 +200,7 @@ def update_changelog(version_number, release_date, changelog_items, changelog):
     update_dictionary = {
         "versionNumber": version_number,
         "releaseDate": release_date,
+        "newMessageAvailable": new_message_available,
         "betaUpdate": beta_update,
         "items": changelog_items
     }
@@ -256,8 +258,11 @@ def main():
 
     version_number = request_version_number(changelog)
     release_date = get_release_date()
+    new_message_available = True if input("Does this version allow the user to send another message to friends? "
+                                          "Type 'y' for yes or anything else for no: ") == "y" else False
 
-    update_changelog(version_number, release_date, changelog_items, changelog)  # Update changelog.json with new data
+    # Update changelog.json with new data
+    update_changelog(version_number, release_date, new_message_available, changelog_items, changelog)
 
     print(f"Program has completed successfully. Check {CHANGELOG_OUTPUT_FILE} to see if it has updated properly.")
 
