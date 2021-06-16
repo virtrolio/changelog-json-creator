@@ -144,8 +144,11 @@ def request_version_number(changelog):
 
         if update_type == "1":
             major += 1
+            minor = 0
+            patch = 0
         elif update_type == "2":
             minor += 1
+            patch = 0
         elif update_type == "3":
             patch += 1
         else:
